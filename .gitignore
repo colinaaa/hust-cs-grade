@@ -12,4 +12,5 @@
 *.out
 
 node_modules/
-./data/husters.json
+data/husters.json
+data/out.xlsx
