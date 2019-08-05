@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 )
 
+// Huster is the struct of a huster
 type Huster struct {
 	ID   string `json:"XH"`
 	Name string `json:"XM"`
@@ -12,11 +13,14 @@ type Huster struct {
 	Class  string  `json:"class,omitempty"`
 	Credit float32 `json:"credit,omitempty"`
 
-	term `json:"term,omitempty"`
+	Term `json:"Term,omitempty"`
 }
 
+// HusterMap is the map with id as key and Huster struct as value
 type HusterMap map[string]Huster
 
+// FindNameByID is the method to find names
+// returns "" if not found
 func (hm HusterMap) FindNameByID(id string) string {
 	h, ok := hm[id]
 	if !ok {
@@ -26,16 +30,19 @@ func (hm HusterMap) FindNameByID(id string) string {
 	return h.Name
 }
 
-type scoreAndRank struct {
+// ScoreAndRank is the struct that contains the infomation of a term
+type ScoreAndRank struct {
 	Score float32 `json:"score,omitempty"`
 	Rank  float32 `json:"rank,omitempty"`
 }
 
-type term interface {
-	Fall2018() scoreAndRank
-	Spring2019() scoreAndRank
+// Term is the interface that contains all the terms
+type Term interface {
+	Fall2018() ScoreAndRank
+	Spring2019() ScoreAndRank
 }
 
+// LoadJSON read .json file from paht arg and return the HusterMap or error
 func LoadJSON(path string) (HusterMap, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
