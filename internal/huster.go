@@ -2,6 +2,7 @@ package internal
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 )
 
@@ -13,7 +14,36 @@ type Huster struct {
 	Class  string  `json:"class,omitempty"`
 	Credit float32 `json:"credit,omitempty"`
 
-	Term `json:"Term,omitempty"`
+	Terms `json:"terms,omitempty"`
+
+	rankFall2018 int
+	rankSpr2019  int
+
+	scoreFall2018 float32
+	scoreSpr2019  float32
+}
+
+func (h Huster) String() string {
+	s := fmt.Sprint(h.ID, h.Name, h.Class, h.Credit, h.All())
+	return s
+}
+
+// Fall2018 implements the Terms interface
+func (h Huster) Fall2018() Term {
+	return Term{
+		Name:  "fall-2018",
+		Score: h.scoreFall2018,
+		Rank:  h.rankFall2018,
+	}
+}
+
+// Spring2019 implements the Terms interface
+func (h Huster) Spring2019() Term {
+	return Term{
+		Name:  "Spring2019",
+		Score: h.scoreSpr2019,
+		Rank:  h.rankSpr2019,
+	}
 }
 
 // HusterMap is the map with id as key and Huster struct as value
@@ -28,18 +58,6 @@ func (hm HusterMap) FindNameByID(id string) string {
 	}
 
 	return h.Name
-}
-
-// ScoreAndRank is the struct that contains the infomation of a term
-type ScoreAndRank struct {
-	Score float32 `json:"score,omitempty"`
-	Rank  float32 `json:"rank,omitempty"`
-}
-
-// Term is the interface that contains all the terms
-type Term interface {
-	Fall2018() ScoreAndRank
-	Spring2019() ScoreAndRank
 }
 
 // LoadJSON read .json file from paht arg and return the HusterMap or error
