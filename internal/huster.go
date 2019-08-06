@@ -1,9 +1,7 @@
 package internal
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 )
 
 // Huster is the struct of a huster
@@ -16,11 +14,11 @@ type Huster struct {
 
 	Terms `json:"terms,omitempty"`
 
-	rankFall2018 int
-	rankSpr2019  int
+	rankFall18 int
+	rankSpr19  int
 
-	scoreFall2018 float32
-	scoreSpr2019  float32
+	scoreFall18 float32
+	scoreSpr19  float32
 }
 
 func (h Huster) String() string {
@@ -28,22 +26,27 @@ func (h Huster) String() string {
 	return s
 }
 
-// Fall2018 implements the Terms interface
-func (h Huster) Fall2018() Term {
+// Fall18 implements the Terms interface
+func (h Huster) Fall18() Term {
 	return Term{
-		Name:  "fall-2018",
-		Score: h.scoreFall2018,
-		Rank:  h.rankFall2018,
+		Name:  "fall18",
+		Score: h.scoreFall18,
+		Rank:  h.rankFall18,
 	}
 }
 
-// Spring2019 implements the Terms interface
-func (h Huster) Spring2019() Term {
+// Spring19 implements the Terms interface
+func (h Huster) Spring19() Term {
 	return Term{
-		Name:  "Spring2019",
-		Score: h.scoreSpr2019,
-		Rank:  h.rankSpr2019,
+		Name:  "Spring19",
+		Score: h.scoreSpr19,
+		Rank:  h.rankSpr19,
 	}
+}
+
+// All returns all the terms
+func (h Huster) All() []Term {
+	return []Term{h.Fall18(), h.Spring19()}
 }
 
 // HusterMap is the map with id as key and Huster struct as value
@@ -58,22 +61,4 @@ func (hm HusterMap) FindNameByID(id string) string {
 	}
 
 	return h.Name
-}
-
-// LoadJSON read .json file from paht arg and return the HusterMap or error
-func LoadJSON(path string) (HusterMap, error) {
-	data, err := ioutil.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
-	var husters []Huster
-	if err := json.Unmarshal(data, &husters); err != nil {
-		return nil, err
-	}
-	m := make(HusterMap, len(husters))
-	for _, h := range husters {
-		m[h.ID] = h
-	}
-
-	return m, nil
 }
