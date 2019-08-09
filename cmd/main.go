@@ -7,6 +7,12 @@ import (
 const output = "./data/out.xlsx"
 
 func main() {
-	m := internal.New(internal.DefaultConfig)
+	m, err := internal.New(internal.Config{
+		XLSXPath: output,
+		JSONPath: "./data/cs18.json",
+	})
+	if err != nil {
+		panic(err)
+	}
 	m.JoinName(output)
 }
