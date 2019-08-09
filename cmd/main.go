@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/colinaaa/hust-cs-grade/internal"
 )
 
@@ -14,5 +16,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	m.JoinName(output)
+	m.ByTerm("overall")
+	for _, h := range m.Slice {
+		fmt.Println(h)
+	}
 }
