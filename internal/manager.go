@@ -79,7 +79,6 @@ func (m *Manager) readAll() {
 			&h.Credit,
 			&h.Class,
 		)
-		fmt.Println(h)
 		m.Slice = append(m.Slice, h)
 	}
 }
