@@ -33,20 +33,20 @@ var DefaultConfig = Config{
 }
 
 // New gets a new manager by config arg
-func New(cfg Config) *Manager {
+func New(cfg Config) (*Manager, error) {
 	xlsx, err := excelize.OpenFile(cfg.XLSXPath)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	hm, err := LoadJSON(cfg.JSONPath)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	m := Manager{File: xlsx, HusterMap: hm}
 	m.readAll()
-	return &m
+	return &m, nil
 }
 
 const idIndex = 1
@@ -66,7 +66,20 @@ func (m *Manager) JoinName(output string) {
 func (m *Manager) readAll() {
 	rows := m.GetRows("sheet0")
 	for _, cols := range rows[4:] {
-		// TODO: add these into slice
-		print(cols)
+		h := Huster{}
+		fmt.Sscanf(
+			strings.Join(cols, " "),
+			"%d %s %s %f %f %f %f %s",
+			&h.rankOverall,
+			&h.ID,
+			&h.Name,
+			&h.scoreFall18,
+			&h.scoreSpr19,
+			&h.scoreOverall,
+			&h.Credit,
+			&h.Class,
+		)
+		fmt.Println(h)
+		m.Slice = append(m.Slice, h)
 	}
 }
