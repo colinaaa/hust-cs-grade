@@ -24,7 +24,11 @@ func (m *Manager) ByTerm(term string) *Manager {
 		})
 	case "spr19":
 		sort.Slice(m.Slice, func(i, j int) bool {
-			return m.Slice[i].Spring2019().Score < m.Slice[j].Spring2019().Score
+			return m.Slice[i].Spring19().Score < m.Slice[j].Spring19().Score
+		})
+	case "overall":
+		sort.Slice(m.Slice, func(i, j int) bool {
+			return m.Slice[i].Overall().Score < m.Slice[j].Overall().Score
 		})
 	default:
 		log.Println("sortByTerm: term not support")

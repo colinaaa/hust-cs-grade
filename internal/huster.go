@@ -12,8 +12,6 @@ type Huster struct {
 	Class  string  `json:"class,omitempty"`
 	Credit float32 `json:"credit,omitempty"`
 
-	Terms `json:"terms,omitempty"`
-
 	rankFall18  int
 	rankSpr19   int
 	rankOverall int
@@ -44,6 +42,15 @@ func (h Huster) Spring19() Term {
 		Name:  "Spring19",
 		Score: h.scoreSpr19,
 		Rank:  h.rankSpr19,
+	}
+}
+
+// Overall impplements the Terms interface
+func (h Huster) Overall() Term {
+	return Term{
+		Name:  "Overall",
+		Score: h.scoreOverall,
+		Rank:  h.rankOverall,
 	}
 }
 

@@ -17,6 +17,6 @@ func (t Term) String() string {
 type Terms interface {
 	All() []Term
 	Overall() Term
-	Fall2018() Term
-	Spring2019() Term
+	Fall18() Term
+	Spring19() Term
 }
