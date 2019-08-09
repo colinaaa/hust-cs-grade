@@ -14,15 +14,18 @@ type Huster struct {
 
 	Terms `json:"terms,omitempty"`
 
-	rankFall18 int
-	rankSpr19  int
+	rankFall18  int
+	rankSpr19   int
+	rankOverall int
 
-	scoreFall18 float32
-	scoreSpr19  float32
+	scoreFall18  float32
+	scoreSpr19   float32
+	scoreOverall float32
 }
 
 func (h Huster) String() string {
-	s := fmt.Sprint(h.ID, h.Name, h.Class, h.Credit, h.All())
+	sep := " "
+	s := fmt.Sprint(h.ID, sep, h.Name, sep, h.Class, sep, h.Credit, sep, h.All())
 	return s
 }
 
@@ -46,7 +49,7 @@ func (h Huster) Spring19() Term {
 
 // All returns all the terms
 func (h Huster) All() []Term {
-	return []Term{h.Fall18(), h.Spring19()}
+	return []Term{h.Fall18(), h.Spring19(), h.Overall()}
 }
 
 // HusterMap is the map with id as key and Huster struct as value
