@@ -4,15 +4,12 @@
 
 > using code to get names and grades together
 
-## What have been done?
-
-- join names with IDs and scores (only HUST-CS-18)
-
 ## TODO List
 
+- [x] join names with IDs and scores (only HUST-CS-18)
 - [ ] add CSEE18
-- [ ] sort the score by code
-- [ ] more powerful struct
+- [x] sort the score by code
+- [x] more powerful struct
 - [ ] support all husters
 
 ## Install
