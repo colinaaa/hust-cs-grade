@@ -82,3 +82,18 @@ func (m *Manager) readAll() {
 		m.Slice = append(m.Slice, h)
 	}
 }
+
+func (m *Manager) titles() *[]string {
+	s := []string{"学号", "姓名", "班级", "总学分"}
+	for _, t := range m.Slice[0].All() {
+		s = append(s, t.Name+"成绩", t.Name+"排名")
+	}
+	return &s
+}
+
+func (m *Manager) writeAll(sheet string) {
+	m.SetSheetRow(sheet, "A1", m.titles())
+	for i, h := range m.Slice {
+		m.SetSheetRow(sheet, "A"+fmt.Sprint(i+2), h.ToStringSlice())
+	}
+}

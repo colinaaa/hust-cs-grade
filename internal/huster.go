@@ -58,3 +58,17 @@ func (h Huster) Overall() Term {
 func (h Huster) All() []Term {
 	return []Term{h.Fall18(), h.Spring19(), h.Overall()}
 }
+
+// ToStringSlice turns Huster into []string
+func (h Huster) ToStringSlice() *[]string {
+	s := []string{
+		h.ID,
+		h.Name,
+		h.Class,
+		fmt.Sprint(h.Credit),
+	}
+	for _, t := range h.All() {
+		s = append(s, fmt.Sprint(t.Score), fmt.Sprint(t.Rank))
+	}
+	return &s
+}
