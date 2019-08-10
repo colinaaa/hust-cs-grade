@@ -33,20 +33,20 @@ var DefaultConfig = Config{
 }
 
 // New gets a new manager by config arg
-func New(cfg Config) *Manager {
+func New(cfg Config) (*Manager, error) {
 	xlsx, err := excelize.OpenFile(cfg.XLSXPath)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	hm, err := LoadJSON(cfg.JSONPath)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	m := Manager{File: xlsx, HusterMap: hm}
 	m.readAll()
-	return &m
+	return &m, nil
 }
 
 const idIndex = 1
@@ -66,7 +66,34 @@ func (m *Manager) JoinName(output string) {
 func (m *Manager) readAll() {
 	rows := m.GetRows("sheet0")
 	for _, cols := range rows[4:] {
-		// TODO: add these into slice
-		print(cols)
+		h := Huster{}
+		fmt.Sscanf(
+			strings.Join(cols, " "),
+			"%d %s %s %f %f %f %f %s",
+			&h.rankOverall,
+			&h.ID,
+			&h.Name,
+			&h.scoreFall18,
+			&h.scoreSpr19,
+			&h.scoreOverall,
+			&h.Credit,
+			&h.Class,
+		)
+		m.Slice = append(m.Slice, h)
+	}
+}
+
+func (m *Manager) titles() *[]string {
+	s := []string{"学号", "姓名", "班级", "总学分"}
+	for _, t := range m.Slice[0].All() {
+		s = append(s, t.Name+"成绩", t.Name+"排名")
+	}
+	return &s
+}
+
+func (m *Manager) writeAll(sheet string) {
+	m.SetSheetRow(sheet, "A1", m.titles())
+	for i, h := range m.Slice {
+		m.SetSheetRow(sheet, "A"+fmt.Sprint(i+2), h.ToStringSlice())
 	}
 }

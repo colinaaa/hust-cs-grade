@@ -12,17 +12,18 @@ type Huster struct {
 	Class  string  `json:"class,omitempty"`
 	Credit float32 `json:"credit,omitempty"`
 
-	Terms `json:"terms,omitempty"`
+	rankFall18  int
+	rankSpr19   int
+	rankOverall int
 
-	rankFall18 int
-	rankSpr19  int
-
-	scoreFall18 float32
-	scoreSpr19  float32
+	scoreFall18  float32
+	scoreSpr19   float32
+	scoreOverall float32
 }
 
 func (h Huster) String() string {
-	s := fmt.Sprint(h.ID, h.Name, h.Class, h.Credit, h.All())
+	sep := " "
+	s := fmt.Sprint(h.ID, sep, h.Name, sep, h.Class, sep, h.Credit, sep, h.All())
 	return s
 }
 
@@ -44,21 +45,30 @@ func (h Huster) Spring19() Term {
 	}
 }
 
-// All returns all the terms
-func (h Huster) All() []Term {
-	return []Term{h.Fall18(), h.Spring19()}
+// Overall impplements the Terms interface
+func (h Huster) Overall() Term {
+	return Term{
+		Name:  "Overall",
+		Score: h.scoreOverall,
+		Rank:  h.rankOverall,
+	}
 }
 
-// HusterMap is the map with id as key and Huster struct as value
-type HusterMap map[string]Huster
+// All returns all the terms
+func (h Huster) All() []Term {
+	return []Term{h.Fall18(), h.Spring19(), h.Overall()}
+}
 
-// FindNameByID is the method to find names
-// returns "" if not found
-func (hm HusterMap) FindNameByID(id string) string {
-	h, ok := hm[id]
-	if !ok {
-		return ""
+// ToStringSlice turns Huster into []string
+func (h Huster) ToStringSlice() *[]string {
+	s := []string{
+		h.ID,
+		h.Name,
+		h.Class,
+		fmt.Sprint(h.Credit),
 	}
-
-	return h.Name
+	for _, t := range h.All() {
+		s = append(s, fmt.Sprint(t.Score), fmt.Sprint(t.Rank))
+	}
+	return &s
 }

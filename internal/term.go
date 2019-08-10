@@ -16,6 +16,7 @@ func (t Term) String() string {
 // Terms is the interface that contains all the terms
 type Terms interface {
 	All() []Term
-	Fall2018() Term
-	Spring2019() Term
+	Overall() Term
+	Fall18() Term
+	Spring19() Term
 }
